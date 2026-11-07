@@ -1,30 +1,65 @@
+/* ==========================================================================
+   HOJA DE ESTILOS - PROYECTO INICIO DE SESIÓN
+   Autor de estilos: Luis
+   Reglas de trabajo en equipo:
+   - No se modifican archivos de Ana (index.html) ni Carla (script.js).
+   - Se respetan todos los nombres de clases e IDs existentes.
+   - Mejoras en espaciado, tipografía, contraste WCAG AA, accesibilidad (:focus-visible)
+     y diseño responsivo con unidades flexibles y media queries.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Variables de Diseño y Paleta de Colores Accesible
+   -------------------------------------------------------------------------- */
 :root {
+    /* Fondos */
     --bg-main: #0b0f19;
-    --card-bg: rgba(23, 32, 54, 0.85);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --card-bg: rgba(23, 32, 54, 0.88);
+    --card-border: rgba(255, 255, 255, 0.1);
+
+    /* Tipografía y Contraste (Cumple con WCAG AA/AAA sobre fondo oscuro) */
+    --text-primary: #f8fafc;        /* Ratio > 14:1 para títulos y valores principales */
+    --text-primary-soft: #e2e8f0;   /* Ratio > 11:1 para etiquetas y textos clave */
+    --text-secondary: #cbd5e1;      /* Ratio > 9:1 para subtítulos y texto secundario */
+    --text-muted: #94a3b8;          /* Ratio > 5:1 para elementos de soporte y leyendas */
+
+    /* Colores de Marca / Énfasis */
     --primary: #6366f1;
+    --primary-light: #818cf8;       /* Ratio de contraste alto (5.7:1) para enlaces y foco */
     --primary-hover: #4f46e5;
+    --primary-glow: rgba(99, 102, 241, 0.35);
     --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --error: #ef4444;
-    --error-bg: rgba(239, 68, 68, 0.12);
-    --error-border: rgba(239, 68, 68, 0.3);
-    --success: #10b981;
-    --success-bg: rgba(16, 185, 129, 0.12);
-    --success-border: rgba(16, 185, 129, 0.3);
-    --input-bg: rgba(15, 23, 42, 0.6);
-    --input-border: rgba(148, 163, 184, 0.2);
-    --input-focus: #6366f1;
+
+    /* Estados de Validación con Alto Contraste */
+    --error: #f87171;               /* Ratio > 6:1 sobre fondo oscuro para textos de error */
+    --error-bg: rgba(239, 68, 68, 0.14);
+    --error-border: rgba(248, 113, 113, 0.4);
+    --success: #34d399;             /* Ratio > 8:1 sobre fondo oscuro */
+    --success-bg: rgba(16, 185, 129, 0.14);
+    --success-border: rgba(52, 211, 153, 0.4);
+
+    /* Campos de Entrada */
+    --input-bg: rgba(15, 23, 42, 0.7);
+    --input-bg-focus: rgba(30, 41, 59, 0.95);
+    --input-border: rgba(148, 163, 184, 0.28);
+    --input-focus: #818cf8;
+
+    /* Radios y Sombras */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
-    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 50px -10px rgba(99, 102, 241, 0.15);
+    --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 50px -10px rgba(99, 102, 241, 0.18);
+    --shadow-input-focus: 0 0 0 4px var(--primary-glow);
+    --shadow-error-focus: 0 0 0 4px rgba(248, 113, 113, 0.25);
+
+    /* Transiciones */
     --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
+/* --------------------------------------------------------------------------
+   Reset y Configuración Global
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,15 +70,21 @@ body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: clamp(1rem, 3vw, 2.5rem);
     position: relative;
     overflow-x: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Fondos decorativos */
+/* --------------------------------------------------------------------------
+   Fondos Decorativos
+   -------------------------------------------------------------------------- */
 .background-decorations {
     position: fixed;
     top: 0;
@@ -64,16 +105,16 @@ body {
 }
 
 .circle-1 {
-    width: 380px;
-    height: 380px;
+    width: clamp(240px, 40vw, 380px);
+    height: clamp(240px, 40vw, 380px);
     background: #6366f1;
-    top: -80px;
-    left: -80px;
+    top: -60px;
+    left: -60px;
 }
 
 .circle-2 {
-    width: 320px;
-    height: 320px;
+    width: clamp(200px, 35vw, 320px);
+    height: clamp(200px, 35vw, 320px);
     background: #ec4899;
     bottom: -60px;
     right: -60px;
@@ -82,26 +123,29 @@ body {
 
 @keyframes float {
     0% { transform: translateY(0px) scale(1); }
-    100% { transform: translateY(35px) scale(1.08); }
+    100% { transform: translateY(30px) scale(1.06); }
 }
 
-/* Contenedor principal */
+/* --------------------------------------------------------------------------
+   Contenedor Principal y Tarjeta Responsiva
+   -------------------------------------------------------------------------- */
 .login-container {
     width: 100%;
-    max-width: 420px;
+    max-width: min(440px, 100%);
     position: relative;
     z-index: 1;
+    margin: 0 auto;
 }
 
-/* Tarjeta */
 .card {
+    width: 100%;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
-    padding: 36px 32px;
+    padding: clamp(1.5rem, 5vw, 2.35rem) clamp(1.2rem, 4.5vw, 2.1rem);
     transition: var(--transition);
     animation: cardAppear 0.5s ease-out;
 }
@@ -109,7 +153,7 @@ body {
 @keyframes cardAppear {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.98);
+        transform: translateY(18px) scale(0.98);
     }
     to {
         opacity: 1;
@@ -129,16 +173,18 @@ body {
     40%, 60% { transform: translate3d(6px, 0, 0); }
 }
 
-/* Cabecera de la tarjeta */
+/* --------------------------------------------------------------------------
+   Cabecera de Tarjeta y Jerarquía Tipográfica
+   -------------------------------------------------------------------------- */
 .card-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: clamp(1.25rem, 3.5vw, 1.75rem);
 }
 
 .brand-icon {
-    width: 54px;
-    height: 54px;
-    margin: 0 auto 16px;
+    width: clamp(48px, 10vw, 56px);
+    height: clamp(48px, 10vw, 56px);
+    margin: 0 auto clamp(0.75rem, 2vw, 1rem);
     background: var(--primary-gradient);
     border-radius: var(--radius-md);
     display: flex;
@@ -149,9 +195,9 @@ body {
 }
 
 .success-icon {
-    width: 68px;
-    height: 68px;
-    margin: 0 auto 16px;
+    width: clamp(56px, 12vw, 68px);
+    height: clamp(56px, 12vw, 68px);
+    margin: 0 auto clamp(0.75rem, 2vw, 1rem);
     background: rgba(16, 185, 129, 0.15);
     border: 2px solid var(--success);
     border-radius: 50%;
@@ -163,83 +209,133 @@ body {
 }
 
 .card-header h2 {
-    font-size: 1.65rem;
+    font-size: clamp(1.4rem, 4vw, 1.75rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    margin-bottom: 0.45rem;
+    color: var(--text-primary);
 }
 
 .card-header p {
-    font-size: 0.92rem;
+    font-size: clamp(0.875rem, 2.5vw, 0.95rem);
     color: var(--text-secondary);
+    line-height: 1.5;
 }
 
-/* Alertas */
+/* --------------------------------------------------------------------------
+   Alertas y Notificaciones de Estado
+   -------------------------------------------------------------------------- */
 .alert {
-    padding: 12px 14px;
+    padding: 0.75rem 0.95rem;
     border-radius: var(--radius-sm);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     font-size: 0.88rem;
+    line-height: 1.45;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.65rem;
     transition: var(--transition);
+}
+
+.alert-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.alert-message {
+    flex: 1;
 }
 
 .alert.alert-error {
     background: var(--error-bg);
     border: 1px solid var(--error-border);
-    color: #fca5a5;
+    color: #fee2e2;
+}
+
+.alert.alert-error .alert-icon::before {
+    content: "⚠️";
 }
 
 .alert.alert-success {
     background: var(--success-bg);
     border: 1px solid var(--success-border);
-    color: #6ee7b7;
+    color: #d1fae5;
 }
 
-/* Formulario */
+.alert.alert-success .alert-icon::before {
+    content: "✓";
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Campos del Formulario y Etiquetas
+   -------------------------------------------------------------------------- */
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: clamp(1rem, 2.5vw, 1.25rem);
     text-align: left;
 }
 
 .form-group label {
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
+    color: var(--text-primary-soft);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
 }
 
 .label-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .label-row label {
     margin-bottom: 0;
 }
 
+/* Enlace "¿Olvidaste tu contraseña?" */
 .forgot-link {
-    font-size: 0.8rem;
-    color: var(--primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--primary-light);
     text-decoration: none;
     transition: var(--transition);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+    display: inline-block;
 }
 
 .forgot-link:hover {
-    color: #a5b4fc;
+    color: #c7d2fe;
     text-decoration: underline;
 }
 
-/* Input con Iconos */
+/* Estilo de Foco Visible para Enlaces */
+.forgot-link:focus,
+.forgot-link:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+    color: #c7d2fe;
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Inputs con Iconos y Estados de Foco Accesible (:focus / :focus-visible)
+   -------------------------------------------------------------------------- */
 .input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .input-icon {
@@ -248,40 +344,64 @@ body {
     color: var(--text-muted);
     pointer-events: none;
     transition: var(--transition);
+    z-index: 1;
 }
 
 .input-wrapper input {
     width: 100%;
-    padding: 12px 14px 12px 42px;
+    min-height: 48px; /* Altura óptima para toques en pantallas táctiles */
+    padding: 12px 44px 12px 42px;
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: var(--radius-md);
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: 1rem; /* 16px exactos: previene zoom molesto en iOS móvil */
+    font-family: inherit;
+    line-height: 1.5;
     transition: var(--transition);
     outline: none;
 }
 
-.input-wrapper input:focus {
-    border-color: var(--input-focus);
-    background: rgba(30, 41, 59, 0.9);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+.input-wrapper input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.85;
 }
 
+/* Estado de Foco Visible y Foco en Inputs */
+.input-wrapper input:focus,
+.input-wrapper input:focus-visible {
+    border-color: var(--input-focus);
+    background: var(--input-bg-focus);
+    outline: 2px solid var(--primary-light);
+    outline-offset: 1px;
+    box-shadow: var(--shadow-input-focus);
+}
+
+/* Resaltado del icono cuando el input tiene foco */
+.input-wrapper:focus-within .input-icon,
 .input-wrapper input:focus + .input-icon,
 .input-wrapper input:focus ~ .input-icon {
-    color: var(--primary);
+    color: var(--primary-light);
 }
 
+/* Estado de error en inputs */
 .input-wrapper input.input-error {
     border-color: var(--error);
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.25);
+}
+
+.input-wrapper input.input-error:focus,
+.input-wrapper input.input-error:focus-visible {
+    border-color: var(--error);
+    outline: 2px solid var(--error);
+    outline-offset: 1px;
+    box-shadow: var(--shadow-error-focus);
 }
 
 /* Botón Ocultar/Mostrar Contraseña */
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 8px;
     background: transparent;
     border: none;
     color: var(--text-muted);
@@ -289,53 +409,83 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
-    border-radius: 4px;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
     transition: var(--transition);
+    z-index: 1;
 }
 
 .toggle-password:hover {
     color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
 }
 
-.toggle-password:focus {
-    outline: 2px solid var(--primary);
+.toggle-password:focus,
+.toggle-password:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 1px;
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
 }
 
-/* Mensajes de error bajo campo */
+/* Mensajes de Error bajo Campo */
 .error-hint {
     display: block;
     color: var(--error);
-    font-size: 0.78rem;
-    margin-top: 6px;
-    min-height: 16px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-top: 0.35rem;
+    min-height: 1.25rem;
+    transition: var(--transition);
 }
 
-/* Opciones extras (Recordarme) */
+/* --------------------------------------------------------------------------
+   Opciones de Formulario (Recordar Usuario)
+   -------------------------------------------------------------------------- */
 .form-options {
-    margin-bottom: 22px;
+    margin-bottom: clamp(1.2rem, 3vw, 1.5rem);
 }
 
 .remember-checkbox {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.86rem;
+    gap: 0.6rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     cursor: pointer;
     user-select: none;
+    min-height: 28px;
+    padding: 2px 4px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.remember-checkbox:hover {
+    color: var(--text-primary-soft);
 }
 
 .remember-checkbox input[type="checkbox"] {
     accent-color: var(--primary);
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
+    border-radius: 4px;
 }
 
-/* Botón Principal */
+.remember-checkbox input[type="checkbox"]:focus,
+.remember-checkbox input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Botones Principales y Secundarios
+   -------------------------------------------------------------------------- */
 .btn-primary {
     width: 100%;
+    min-height: 48px; /* Objetivo táctil accesible */
     padding: 13px 20px;
     background: var(--primary-gradient);
     border: none;
@@ -343,6 +493,7 @@ body {
     color: #ffffff;
     font-size: 0.98rem;
     font-weight: 600;
+    letter-spacing: 0.01em;
     cursor: pointer;
     box-shadow: 0 8px 18px -4px rgba(99, 102, 241, 0.4);
     display: flex;
@@ -352,28 +503,38 @@ body {
     transition: var(--transition);
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 12px 24px -4px rgba(99, 102, 241, 0.55);
-    filter: brightness(1.05);
+    filter: brightness(1.06);
 }
 
-.btn-primary:active {
+.btn-primary:active:not(:disabled) {
     transform: translateY(0);
 }
 
-.btn-primary:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none;
+/* Foco Visible en Botón Principal */
+.btn-primary:focus,
+.btn-primary:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
-/* Botón Secundario (Cerrar sesión) */
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    filter: grayscale(0.2);
+}
+
+/* Botón Secundario (Cerrar Sesión) */
 .btn-secondary {
     width: 100%;
+    min-height: 46px;
     padding: 12px 20px;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-size: 0.95rem;
@@ -387,9 +548,16 @@ body {
 }
 
 .btn-secondary:hover {
-    background: rgba(239, 68, 68, 0.12);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(248, 113, 113, 0.4);
+    color: #fee2e2;
+}
+
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+    outline: 2px solid var(--error);
+    outline-offset: 3px;
+    background: rgba(239, 68, 68, 0.18);
 }
 
 /* Spinner de carga */
@@ -406,12 +574,14 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Cuadro de credenciales demo */
+/* --------------------------------------------------------------------------
+   Cuadro de Credenciales Demo
+   -------------------------------------------------------------------------- */
 .demo-box {
-    margin-top: 24px;
-    padding: 12px 14px;
+    margin-top: clamp(1.25rem, 3.5vw, 1.65rem);
+    padding: clamp(0.75rem, 2vw, 0.95rem) clamp(0.85rem, 2.5vw, 1.15rem);
     background: rgba(255, 255, 255, 0.03);
-    border: 1px dashed rgba(255, 255, 255, 0.14);
+    border: 1px dashed rgba(255, 255, 255, 0.16);
     border-radius: var(--radius-md);
     text-align: center;
 }
@@ -419,35 +589,39 @@ body {
 .demo-title {
     display: block;
     font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
+    color: var(--text-secondary);
+    margin-bottom: 0.45rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 600;
 }
 
 .demo-fill-btn {
+    width: 100%;
     background: transparent;
     border: none;
-    color: var(--text-secondary);
-    font-size: 0.84rem;
+    color: var(--text-primary-soft);
+    font-size: 0.85rem;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 8px 10px;
     border-radius: var(--radius-sm);
     transition: var(--transition);
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 3px;
+    min-height: 44px;
+    justify-content: center;
 }
 
 .demo-fill-btn strong {
     color: #c7d2fe;
+    font-weight: 600;
 }
 
 .demo-fill-btn small {
     color: var(--text-muted);
-    font-size: 0.75rem;
+    font-size: 0.76rem;
 }
 
 .demo-fill-btn:hover {
@@ -455,68 +629,225 @@ body {
     color: #ffffff;
 }
 
-/* Vista del Dashboard / Éxito */
+.demo-fill-btn:focus,
+.demo-fill-btn:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+    background: rgba(99, 102, 241, 0.22);
+}
+
+/* --------------------------------------------------------------------------
+   Vista de Panel / Éxito (Dashboard Card)
+   -------------------------------------------------------------------------- */
 .user-profile-preview {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 16px;
-    background: rgba(15, 23, 42, 0.7);
+    gap: clamp(0.75rem, 2.5vw, 1rem);
+    padding: clamp(0.85rem, 2.5vw, 1.15rem);
+    background: rgba(15, 23, 42, 0.75);
     border: 1px solid var(--card-border);
     border-radius: var(--radius-md);
-    margin-bottom: 24px;
+    margin-bottom: clamp(1.25rem, 3.5vw, 1.65rem);
     text-align: left;
 }
 
 .avatar {
-    width: 48px;
-    height: 48px;
+    width: clamp(42px, 8vw, 48px);
+    height: clamp(42px, 8vw, 48px);
     border-radius: 50%;
     background: var(--primary-gradient);
     color: #ffffff;
-    font-size: 1.25rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    flex-shrink: 0;
 }
 
 .user-details {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     overflow: hidden;
+    min-width: 0; /* Permite truncate o word-break correcto en flexbox */
 }
 
 .user-label {
-    font-size: 0.75rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
+    font-weight: 500;
 }
 
 .user-email {
     font-size: 0.95rem;
     color: var(--text-primary);
     word-break: break-all;
+    font-weight: 600;
 }
 
 .badge {
     display: inline-block;
     align-self: flex-start;
     margin-top: 4px;
-    background: rgba(16, 185, 129, 0.15);
+    background: rgba(16, 185, 129, 0.16);
     color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    font-size: 0.72rem;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    font-size: 0.75rem;
     font-weight: 600;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: 20px;
 }
 
-/* Clases de utilidad */
+/* --------------------------------------------------------------------------
+   Clases de Utilidad
+   -------------------------------------------------------------------------- */
 .hidden {
     display: none !important;
+}
+
+/* ==========================================================================
+   DISEÑO RESPONSIVO (MEDIA QUERIES)
+   Adaptación fluida para móviles, tablets y escritorios
+   ========================================================================== */
+
+/* Dispositivos Móviles (Pantallas pequeñas <= 480px) */
+@media (max-width: 480px) {
+    body {
+        padding: 12px 10px;
+        align-items: center;
+    }
+
+    .login-container {
+        max-width: 100%;
+    }
+
+    .card {
+        padding: 22px 16px;
+        border-radius: var(--radius-md);
+    }
+
+    .card-header {
+        margin-bottom: 18px;
+    }
+
+    .card-header h2 {
+        font-size: 1.45rem;
+    }
+
+    .card-header p {
+        font-size: 0.875rem;
+    }
+
+    .label-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .forgot-link {
+        font-size: 0.8rem;
+    }
+
+    .input-wrapper input {
+        font-size: 1rem; /* Mantiene 16px para evitar auto-zoom */
+        min-height: 46px;
+        padding-left: 38px;
+        padding-right: 42px;
+    }
+
+    .input-icon {
+        left: 12px;
+        width: 17px;
+        height: 17px;
+    }
+
+    .toggle-password {
+        right: 4px;
+        width: 36px;
+        height: 36px;
+    }
+
+    .btn-primary {
+        min-height: 46px;
+        font-size: 0.95rem;
+    }
+
+    .demo-box {
+        margin-top: 18px;
+        padding: 10px 12px;
+    }
+
+    .demo-fill-btn {
+        font-size: 0.8rem;
+    }
+
+    .circle-1 {
+        width: 220px;
+        height: 220px;
+        top: -40px;
+        left: -40px;
+        opacity: 0.25;
+    }
+
+    .circle-2 {
+        width: 180px;
+        height: 180px;
+        bottom: -40px;
+        right: -40px;
+        opacity: 0.25;
+    }
+}
+
+/* Pantallas Extra Pequeñas (<= 340px, ej. teléfonos ultracompactos) */
+@media (max-width: 340px) {
+    .card {
+        padding: 18px 12px;
+    }
+
+    .label-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .card-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .input-wrapper input {
+        padding-left: 36px;
+    }
+}
+
+/* Pantallas Medianas y Grandes (>= 768px) */
+@media (min-width: 768px) {
+    .card {
+        padding: 38px 34px;
+    }
+
+    .card:hover {
+        border-color: rgba(255, 255, 255, 0.14);
+    }
+}
+
+/* Accesibilidad: Respetar preferencia de reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .circle {
+        animation: none !important;
+    }
 }
